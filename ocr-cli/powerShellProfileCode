@@ -1,0 +1,4 @@
+function ocr {
+    param([string]$path)
+    node "D:\Aniket\Code\Scripts\ocr-cli\ocr.js" $path
+}

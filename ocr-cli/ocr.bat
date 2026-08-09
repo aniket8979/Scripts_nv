@@ -1,0 +1,1 @@
+@node "D:\Aniket\Code\Scripts\ocr-cli\ocr.js" %*

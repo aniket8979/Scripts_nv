@@ -1,0 +1,17 @@
+{
+  "name": "js-script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "CheckPatientApi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "pidusage": "^4.0.1",
+    "systeminformation": "^5.31.7"
+  }
+}

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoho Projects Timesheet Auto-Filler</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #3b82f6;
+            --text: #f8fafc;
+            --subtext: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 720px;
+            background: var(--card);
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text);
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--subtext);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: #0f172a;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            height: 70px;
+        }
+
+        .row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+        }
+
+        button:disabled {
+            background-color: var(--border);
+            cursor: not-allowed;
+            color: var(--subtext);
+        }
+
+        .btn-secondary {
+            background-color: #475569;
+            margin-bottom: 16px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #334155;
+        }
+
+        #logs {
+            margin-top: 24px;
+            background: #090d16;
+            border-radius: 6px;
+            padding: 14px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 260px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+
+        .log-entry {
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .log-info { color: var(--subtext); }
+        .log-success { color: var(--success); }
+        .log-warn { color: var(--warning); }
+        .log-error { color: var(--danger); }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Zoho Projects Timesheet Auto-Filler</h2>
+
+    <!-- STEP 1: COOKIE INPUT & FETCH PROJECTS -->
+    <div class="form-group">
+        <label for="cookies">1. Zoho Cookie String</label>
+        <textarea id="cookies" placeholder="Paste your raw browser cookie string here (e.g. poptimer=true; zpct=... CSRF_TOKEN=...)"></textarea>
+    </div>
+
+    <button id="btnFetchProjects" class="btn-secondary" onclick="fetchProjects()">Fetch Active Projects</button>
+
+    <!-- STEP 2: PROJECT & DATE RANGE FORM -->
+    <div id="timesheetSection" class="hidden">
+        <div class="form-group">
+            <label for="projectSelect">2. Select Target Project</label>
+            <select id="projectSelect" onchange="onProjectChange()">
+                <option value="">-- Choose a Project --</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate">
+            </div>
+            <div class="col form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" id="endDate">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col form-group">
+                <label for="totalHours">Hours per Day (HH:MM)</label>
+                <input type="text" id="totalHours" value="06:00" placeholder="06:00">
+            </div>
+            <div class="col form-group">
+                <label for="billStatus">Billing Status</label>
+                <select id="billStatus">
+                    <option value="Billable">Billable</option>
+                    <option value="Non Billable">Non Billable</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="btnSubmit" onclick="runAutoFill()">Submit Timesheet Entries</button>
+    </div>
+
+    <!-- LOG OUTPUT TERMINAL -->
+    <div id="logs" class="hidden"></div>
+</div>
+
+<script>
+    let projectsList = [];
+    let extractedCsrf = "";
+    let extractedPortalId = "";
+    let extractedZpuid = "";
+
+    function log(msg, type = "info") {
+        const logBox = document.getElementById('logs');
+        logBox.classList.remove('hidden');
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-${type}`;
+        const timestamp = new Date().toLocaleTimeString();
+        entry.textContent = `[${timestamp}] ${msg}`;
+        logBox.appendChild(entry);
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function clearLogs() {
+        const logBox = document.getElementById('logs');
+        logBox.innerHTML = '';
+    }
+
+    // Extract CSRF Token (zpcp) & Portal ZUID from Cookie String
+    function parseCookieData(cookieStr) {
+        // Extract zpcp / zpct / CSRF_TOKEN
+        const csrfMatch = cookieStr.match(/(?:zpcp|zpct|CSRF_TOKEN)=([a-f0-9]+)/i);
+        extractedCsrf = csrfMatch ? `zpcp=${csrfMatch[1]}` : "";
+
+        // Extract Portal ID if available in cookie (zalb_zid)
+        const portalMatch = cookieStr.match(/zalb_zid=(\d+)/i);
+        extractedPortalId = portalMatch ? portalMatch[1] : "55419992"; // Fallback to current portal
+
+        return { csrf: extractedCsrf, portalId: extractedPortalId };
+    }
+
+    // Fetch active projects for user
+    async function fetchProjects() {
+        clearLogs();
+        const cookies = document.getElementById('cookies').value.trim();
+        if (!cookies) {
+            log("Please enter a valid Cookie string.", "error");
+            return;
+        }
+
+        parseCookieData(cookies);
+        if (!extractedCsrf) {
+            log("⚠️ Warning: Could not find 'zpcp' or 'CSRF_TOKEN' inside cookies. Script will proceed with default token mapping.", "warn");
+        }
+
+        log("Fetching active projects list from Zoho...", "info");
+
+        const targetUrl = `https://projects.zoho.com/portal/novelvoxsoftwares/projectlistprovider.do?fetchfor=projectslist&fetchid=0&search_string=&index=0&range=100&status=active&permission_module=timesheet&permission_type=create&is_permission_filtered=true&is_all_associated=false&is_sprints_only_projects=false`;
+
+        try {
+            const resp = await fetch(targetUrl, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-ZCSRF-TOKEN': extractedCsrf,
+                    'X-ZOHO-SERVICE': 'Projects',
+                    'Cookie': cookies
+                }
+            });
+
+            if (!resp.ok) {
+                throw new Error(`HTTP Error Status: ${resp.status}`);
+            }
+
+            projectsList = await resp.json();
+            
+            const projectSelect = document.getElementById('projectSelect');
+            projectSelect.innerHTML = '<option value="">-- Choose a Project --</option>';
+
+            projectsList.forEach(proj => {
+                const opt = document.createElement('option');
+                opt.value = proj.id;
+                opt.textContent = `${proj.name} (${proj.prefix || proj.id})`;
+                projectSelect.appendChild(opt);
+            });
+
+            document.getElementById('timesheetSection').classList.remove('hidden');
+            log(`Success! Found ${projectsList.length} active projects. Select a project below.`, "success");
+
+        } catch (err) {
+            log(`Failed to fetch projects: ${err.message}`, "error");
+        }
+    }
+
+    function onProjectChange() {
+        const projectId = document.getElementById('projectSelect').value;
+        if (projectId) {
+            const proj = projectsList.find(p => p.id === projectId);
+            log(`Selected Project: ${proj.name}`, "info");
+        }
+    }
+
+    // Fetch Assigned Tasks for Selected Project
+    async function fetchAssignedTasks(portalId, projectId, cookies) {
+        log("Fetching tasks assigned to you for this project...", "info");
+
+        // First attempt to get tasks with default filter
+        const url = `https://projects.zoho.com/api/v3/portal/${portalId}/projects/${projectId}/timesheet/tasks?page=1&per_page=100&type=All`;
+
+        const resp = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-ZCSRF-TOKEN': extractedCsrf,
+                'X-ZOHO-SERVICE': 'Projects',
+                'Cookie': cookies
+            }
+        });
+
+        if (!resp.ok) {
+            throw new Error(`Failed to fetch tasks. Status: ${resp.status}`);
+        }
+
+        const data = await resp.json();
+        
+        // Filter strictly where is_assigned === true
+        const assignedTasks = data.filter(task => task.is_assigned === true && !task.is_closed);
+
+        // Capture owner_zpuid if available in query parameters
+        if (data.length > 0 && data[0].look_up_data) {
+            // retain existing zpuid
+        }
+
+        return assignedTasks;
+    }
+
+    // Convert "HH:MM" to Minutes
+    function parseTimeToMinutes(timeStr) {
+        const [h, m] = timeStr.split(':').map(Number);
+        return (h * 60) + (m || 0);
+    }
+
+    // Convert Minutes back to "HH:MM"
+    function formatMinutesToTime(totalMinutes) {
+        const h = Math.floor(totalMinutes / 60);
+        const m = Math.round(totalMinutes % 60);
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    // Split Total Hours across N tasks
+    function splitHoursAcrossTasks(totalHoursStr, taskCount) {
+        const totalMinutes = parseTimeToMinutes(totalHoursStr);
+        const baseMinutes = Math.floor(totalMinutes / taskCount);
+        let remainder = totalMinutes % taskCount;
+
+        const allocations = [];
+        for (let i = 0; i < taskCount; i++) {
+            let allocated = baseMinutes;
+            if (remainder > 0) {
+                allocated += 1; // Distribute remaining minutes
+                remainder -= 1;
+            }
+            allocations.push(formatMinutesToTime(allocated));
+        }
+        return allocations;
+    }
+
+    // Sleep helper
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // MAIN AUTOMATION EXECUTION
+    async function runAutoFill() {
+        const cookies = document.getElementById('cookies').value.trim();
+        const projectId = document.getElementById('projectSelect').value;
+        const startDateVal = document.getElementById('startDate').value;
+        const endDateVal = document.getElementById('endDate').value;
+        const totalHours = document.getElementById('totalHours').value;
+        const billStatus = document.getElementById('billStatus').value;
+
+        if (!projectId || !startDateVal || !endDateVal) {
+            log("Please fill in Project, Start Date, and End Date.", "error");
+            return;
+        }
+
+        const btnSubmit = document.getElementById('btnSubmit');
+        btnSubmit.disabled = true;
+
+        try {
+            // 1. Fetch assigned tasks
+            const assignedTasks = await fetchAssignedTasks(extractedPortalId, projectId, cookies);
+
+            if (!assignedTasks || assignedTasks.length === 0) {
+                log("❌ FALLBACK: No assigned open tasks found for you in this project!", "error");
+                log("Please select a different project from the dropdown above.", "warn");
+                btnSubmit.disabled = false;
+                return;
+            }
+
+            log(`Found ${assignedTasks.length} assigned task(s): ${assignedTasks.map(t => t.name).join(', ')}`, "success");
+
+            // 2. Calculate hour distribution
+            const allocatedHours = splitHoursAcrossTasks(totalHours, assignedTasks.length);
+            log(`Split ${totalHours} hours across ${assignedTasks.length} task(s): ${allocatedHours.join(', ')}`, "info");
+
+            // 3. Iterate through date range
+            const start = new Date(startDateVal);
+            const end = new Date(endDateVal);
+            let current = new Date(start);
+
+            let totalEntriesLogged = 0;
+
+            while (current <= end) {
+                const dayOfWeek = current.getDay();
+                const dateStr = current.toISOString().split('T')[0];
+
+                // Skip Saturday (6) and Sunday (0)
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    const dayName = dayOfWeek === 0 ? "Sunday" : "Saturday";
+                    log(`🏖 Skipped ${dateStr} (${dayName}).`, "warn");
+                    current.setDate(current.getDate() + 1);
+                    continue;
+                }
+
+                log(`⏱ Processing time log for date: ${dateStr}...`, "info");
+
+                // Submit log entry for each assigned task
+                for (let i = 0; i < assignedTasks.length; i++) {
+                    const task = assignedTasks[i];
+                    const taskHours = allocatedHours[i];
+
+                    const logPayload = {
+                        "owner_zpuid": "824168000020084001", // User ZPUID
+                        "date": dateStr,
+                        "frompage": "mytimesheetcalendar",
+                        "module": {
+                            "id": task.id,
+                            "type": "task"
+                        },
+                        "bill_status": billStatus,
+                        "notes": "<div><br></div>",
+                        "hours": taskHours,
+                        "for_timer": false
+                    };
+
+                    const postUrl = `https://projects.zoho.com/api/v3/portal/${extractedPortalId}/projects/${projectId}/log`;
+
+                    const logResp = await fetch(postUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-ZCSRF-TOKEN': extractedCsrf,
+                            'X-ZOHO-SERVICE': 'Projects',
+                            'Cookie': cookies
+                        },
+                        body: JSON.stringify(logPayload)
+                    });
+
+                    if (logResp.ok) {
+                        const resData = await logResp.json();
+                        log(`  ✅ Logged ${taskHours} hrs -> Task: "${task.name}" (ID: ${resData.id || 'Done'})`, "success");
+                        totalEntriesLogged++;
+                    } else {
+                        log(`  ❌ Failed logging for Task: "${task.name}" on ${dateStr}. Status: ${logResp.status}`, "error");
+                    }
+
+                    // 1.2-second rate-limit protection delay
+                    await sleep(1200);
+                }
+
+                current.setDate(current.getDate() + 1);
+            }
+
+            log(`\n🎉 Completed! Total ${totalEntriesLogged} timesheet entry logs successfully created.`, "success");
+            log(`You can now select a NEW project from the list above and run again for another project.`, "info");
+
+        } catch (err) {
+            log(`Execution error: ${err.message}`, "error");
+        } finally {
+            btnSubmit.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
