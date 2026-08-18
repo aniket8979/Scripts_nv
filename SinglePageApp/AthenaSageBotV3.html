@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AthenaHealth Chatbot</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f9;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 800px;
+      height: 90vh;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #004b87;
+      color: #ffffff;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-info span {
+      font-size: 0.8rem;
+      font-weight: normal;
+      opacity: 0.8;
+    }
+
+    .reset-btn {
+      background-color: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .reset-btn:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-color: #ffffff;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      line-height: 1.5;
+      font-size: 0.95rem;
+      word-break: break-word;
+      position: relative;
+    }
+
+    .message-content {
+      white-space: pre-wrap;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background-color: #004b87;
+      color: #ffffff;
+      border-bottom-right-radius: 2px;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background-color: #f0f4f8;
+      color: #1a202c;
+      border-bottom-left-radius: 2px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .message.bot a {
+      color: #004b87;
+      text-decoration: underline;
+    }
+
+    .message.user a {
+      color: #e2e8f0;
+    }
+
+    /* Actions toolbar at bottom of bot messages */
+    .bot-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 6px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      margin-top: 4px;
+    }
+
+    .copy-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e0;
+      color: #4a5568;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      background: #edf2f7;
+      color: #004b87;
+      border-color: #a0aec0;
+    }
+
+    .copy-btn.copied {
+      background: #48bb78;
+      color: #ffffff;
+      border-color: #48bb78;
+    }
+
+    .loading-indicator {
+      align-self: flex-start;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: #f0f4f8;
+      border-radius: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #a0aec0;
+      border-radius: 50%;
+      animation: pulse 1.4s infinite ease-in-out both;
+    }
+
+    .dot:nth-child(1) { animation-delay: -0.32s; }
+    .dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes pulse {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    .chat-input-area {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 12px;
+    }
+
+    textarea {
+      flex: 1;
+      resize: none;
+      height: 48px;
+      padding: 12px;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus {
+      border-color: #004b87;
+    }
+
+    .send-btn {
+      background-color: #004b87;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .send-btn:hover {
+      background-color: #00335e;
+    }
+
+    .send-btn:disabled {
+      background-color: #a0aec0;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">
+    <div class="header-info">
+      AthenaHealth Sage Assistant
+      <span id="conv-id">ID: 2c39de5d-f786...</span>
+    </div>
+    <button class="reset-btn" onclick="clearHistory()">Reset Chat</button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <!-- Messages appended dynamically -->
+  </div>
+
+  <div class="loading-indicator" id="loading">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea id="user-input" placeholder="Type your message here..." rows="1"></textarea>
+    <button class="send-btn" id="send-btn" onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'https://docs.athenahealth.com/api/v1/chat';
+  const INITIAL_GREETING = "Hi, I'm Sage — how can I help you today?";
+  
+  let conversationId = crypto.randomUUID();
+  let chatHistory = [
+    INITIAL_GREETING
+  ];
+
+  window.addEventListener('DOMContentLoaded', () => {
+    updateHeaderId();
+    renderHistory();
+  });
+
+  function renderHistory() {
+    const messagesContainer = document.getElementById('chat-messages');
+    messagesContainer.innerHTML = '';
+    
+    chatHistory.forEach((text, index) => {
+      if (index === 0) {
+        appendMessage(text, 'bot');
+      } else if (index % 2 === 1) {
+        appendMessage(text, 'user');
+      } else {
+        appendMessage(text, 'bot');
+      }
+    });
+  }
+
+  function clearHistory() {
+    chatHistory = [INITIAL_GREETING];
+    conversationId = crypto.randomUUID();
+    updateHeaderId();
+    renderHistory();
+  }
+
+  function updateHeaderId() {
+    document.getElementById('conv-id').textContent = `ID: ${conversationId.slice(0, 8)}...`;
+  }
+
+  async function sendMessage() {
+    const inputEl = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const loadingEl = document.getElementById('loading');
+    const messageText = inputEl.value.trim();
+    
+    
+
+    if (!messageText) return;
+
+    appendMessage(messageText, 'user');
+    inputEl.value = '';
+    
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+    loadingEl.style.display = 'flex';
+    scrollToBottom();
+
+    const payload = {
+      text: messageText,
+      history: chatHistory,
+      conversationId: conversationId
+    };
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      
+      let botReply = '';
+      if (data && data.RESPONSE && data.RESPONSE.prediction && data.RESPONSE.prediction.text) {
+        botReply = data.RESPONSE.prediction.text;
+      } else if (data.text) {
+        botReply = data.text;
+      } else {
+        botReply = "Received an unexpected response structure from the server.";
+      }
+
+      chatHistory.push(messageText);
+      chatHistory.push(botReply);
+      appendMessage(botReply, 'bot');
+
+    } catch (error) {
+      console.error('API Error:', error);
+      appendMessage('Error: Unable to reach the API server. Check browser CORS settings or network credentials.', 'bot');
+    } finally {
+      inputEl.disabled = false;
+      sendBtn.disabled = false;
+      loadingEl.style.display = 'none';
+      inputEl.focus();
+      scrollToBottom();
+    }
+  }
+
+  function appendMessage(text, sender) {
+    const messagesContainer = document.getElementById('chat-messages');
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.classList.add('message-content');
+
+    let formattedText = escapeHtml(text)
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    contentDiv.innerHTML = formattedText;
+    msgDiv.appendChild(contentDiv);
+
+    // Add Copy toolbar for Bot messages
+    if (sender === 'bot') {
+      const actionsDiv = document.createElement('div');
+      actionsDiv.classList.add('bot-actions');
+
+      const copyMdBtn = document.createElement('button');
+      copyMdBtn.classList.add('copy-btn');
+      copyMdBtn.textContent = '📋 Copy MD';
+      copyMdBtn.onclick = (e) => copyToClipboard(text, e.target, 'Markdown');
+
+      const copyHtmlBtn = document.createElement('button');
+      copyHtmlBtn.classList.add('copy-btn');
+      copyHtmlBtn.textContent = '🌐 Copy HTML';
+      copyHtmlBtn.onclick = (e) => copyToClipboard(contentDiv.innerHTML, e.target, 'HTML');
+
+      actionsDiv.appendChild(copyMdBtn);
+      actionsDiv.appendChild(copyHtmlBtn);
+      msgDiv.appendChild(actionsDiv);
+    }
+
+    messagesContainer.appendChild(msgDiv);
+    scrollToBottom();
+  }
+
+  function copyToClipboard(text, btnElement, formatType) {
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = btnElement.textContent;
+      btnElement.textContent = `✓ Copied ${formatType}!`;
+      btnElement.classList.add('copied');
+
+      setTimeout(() => {
+        btnElement.textContent = originalText;
+        btnElement.classList.remove('copied');
+      }, 2000);
+    }).catch(err => {
+      console.error('Copy failed: ', err);
+    });
+  }
+
+  function scrollToBottom() {
+    const messagesContainer = document.getElementById('chat-messages');
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  document.getElementById('user-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+</script>
+
+</body>
+</html>
