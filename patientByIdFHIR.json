@@ -1,0 +1,73 @@
+{
+    "status": "SUCCESS",
+    "code": "200",
+    "message": "patient data from athena FHIR R4",
+    "data": {
+        "patient": {
+            "id": "1",
+            "patientName": "Athena Test",
+            "dob": "1993-01-01",
+            "email": "test@athena.com",
+            "ssn": "",
+            "address": "123 ANYTOWN LANE HOLLYWOOD CA 75412",
+            "patientType": "",
+            "phoneNumber": "(512) 777-9311",
+            "consentToCall": "",
+            "consentToText": "",
+            "department": "",
+            "ecName": "",
+            "ecPhone": "",
+            "ecRelationShip": "",
+            "employer": "",
+            "employerContact": "",
+            "img": "eyeIcon"
+        },
+        "appointment": {
+            "futureAppointment": 0,
+            "upcomingAppointmentDate": "",
+            "upcomingAppointmentDoctor": "",
+            "cancelled": 0,
+            "booked": 0,
+            "completed": 0,
+            "noShow": 0,
+            "apptView": [],
+            "apptViewCount": 0,
+            "img": "eyeIcon"
+        },
+        "insuranceInfo": {
+            "insuranceName": "*SELF PAY*",
+            "insuranceCode": "81",
+            "insuranceType": "Self-pay (Includes applicants for insurance and Medicaid applicants)",
+            "startDate": "",
+            "endDate": "",
+            "img": "eyeIcon"
+        },
+        "pharmacyDetail": {
+            "pharmacyName": "",
+            "pharmacyNumber": ""
+        },
+        "patientCareTeam": {
+            "careTeamName": "",
+            "careTeamSpeciality": ""
+        },
+        "billingDetail": {
+            "totalPendingBills": 0,
+            "totalBalanceAmount": "$0",
+            "billList": [
+                {
+                    "id": "",
+                    "code": "",
+                    "date": "",
+                    "department": "",
+                    "description": "",
+                    "providerName": "",
+                    "ptBalance": "$0.00",
+                    "insuranceBalance": "$0.00",
+                    "img": "eyeIcon"
+                }
+            ],
+            "billListCount": 0,
+            "billingInfo": []
+        }
+    }
+}

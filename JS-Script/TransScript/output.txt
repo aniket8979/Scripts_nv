@@ -1,0 +1,529 @@
+Yeah. Okay.
+>> Okay. So, what what would you like to
+see? This is the page you want to see,
+right?
+>> Um
+overview.
+>> Yeah. This is what we're sending over.
+profile.
+Uh, okay. Can you can you just click on
+registration information?
+>> Sure. You want to see it on the on the
+view or manage side?
+>> Manage side. Yeah.
+>> Okay.
+So, this is what it's what it's on right
+now.
+Let me see if I can if I can edit this.
+Hold on.
+Mhm.
+Not remove.
+Oh, manage. Here it is. Uh
+oh. Not sure why it's not letting me
+edit these options here.
+Yeah, it's not letting me It's not
+letting me show you and and change these
+Let me see if it's under my permissions
+here.
+Mhm.
+>> Uh, no.
+>> Yeah. I'm not sure why it's not letting
+me do that.
+I know. I They've made a few
+>> Yeah, they've made a a few changes
+recently with their dashboard. So, I
+don't know if that's causing anything.
+>> Unable to edit.
+>> Oh, maybe here.
+Oh, the scopes. Here you go.
+I mean, I can see them, but it won't let
+me edit them for some reason.
+>> Mhm. Okay. Uh and in the registration
+section I believe go up
+go up
+registration anduling.
+Yeah. See registration schedule. It's
+not let it's not letting me edit or see
+the the things but we can see most of
+them here.
+You see there's a
+right. So it it definitely has access to
+to create that that setting
+>> which again we would just want to
+everything else the app is doing is
+doing it fine.
+>> It's creating it exactly how we want the
+meeting. It's doing everything proper.
+The only thing is it's it's
+automatically checking that registration
+for us, which we do not want the client
+to register. We wanted to just send the
+invite and be an open invite.
+>> Okay.
+>> Okay. So, were there any changes that
+recently have been made uh by the Zoom
+side or were there any updates from the
+Zoom site, Zoom application or something
+like that because Zoom work place,
+right?
+Yeah, but no, no, there hasn't been any
+updates. This right now is it's the um
+they they updated the experience,
+meaning the way that everything is is uh
+looks like, but this was done a few days
+ago.
+>> Uh and we've been having that problem
+for a few weeks already.
+>> Okay.
+>> Yeah.
+And like I said, it it only happens with
+meetings that are created by
+on by double. All the other meetings
+that we create do not have that problem.
+>> Okay.
+>> And and like Eli was mentioning, we did
+not have this problem before where we
+test we went live with a a couple of
+providers. Uh they were having the
+meetings uh fine, you know, consistent.
+So I don't know what happened. Uh I'm
+assuming that there was an update that
+happened that uh prevent this uh uh that
+now start you know having this
+inconsistency.
+>> Okay. Okay. Can you click on
+registration information above any if
+you can see that permission?
+Yeah. Registration information.
+Yeah. This one's a view so I can see if
+it is or not. The one we would do would
+be this one here.
+>> Okay. You are using Zoom admin, right?
+Still you are unable to
+uh get those things.
+>> Yeah, the these are the scopes that
+we're sending through. So we're this is
+what we're giving you access to modify.
+So we see here for any any meetings they
+could write anything with
+registrant
+like like uh
+I'll be unable to change anything in the
+Zoom marketplace like over here you are
+having the admin credential side still
+you are unable to edit anything or do
+the changes on registration anduling
+>> yeah I'm not sure why it's not mad at me
+edit that right now I I usually I'm the
+one that edit edited and created the app
+so let me see if there's something else
+is going
+do manage app.
+There should should be one option here
+that says scopes and then
+>> let me let me stop sharing for a second
+cuz my computer is lagging.
+>> Yeah.
+>> Mhm.
+>> Give me one sec here.
+>> Yeah. Also, Ivan was asking for if if
+this can be reproduced
+by any test patient or test account.
+>> Yes. Yes. I'm I'm I'm working on it
+right now.
+>> Okay. Okay.
+I'm still here. I'm I'm just looking for
+it now.
+Okay.
+Take your time.
+Okay.
+Apparently with the with the new view
+they had to had to change where where it
+was.
+>> So I'm going to quickly share my screen
+here again.
+Okay. Should see it here.
+>> Yeah, I can see. Yeah.
+Can I share my screen first real quick?
+Uh guys.
+>> Yeah, sure.
+>> Uh I can see the scopes now
+>> in Ellie's screen.
+>> Uh so Ellie uh can we
+uh
+can we select uh resistant admin?
+But this should be optional, right? Like
+you want it to be the optional. It
+should not be removed basically, right?
+Uh it should be there but it should be
+optional, right? Registration.
+>> So this one here optional.
+>> Yeah.
+Like for the patients you want uh the
+registration field to be optional. Not
+always. It should be selected tick. It
+should it should not always should be
+tick but it should be optional. Correct.
+Yeah. Yeah. See this one add a register
+to a meeting. We don't want
+I mean I don't know what it's going to
+consider registering is that if that's
+only the person that's going to be at
+the meeting or if this is going to be
+um that the option register is enabled
+by like by force.
+But we can we can try like this and then
+we can have Ivan share his screen. the
+first one. If we if we uh select the
+first one
+and
+delete it, I believe then that should be
+good to go.
+Create a meeting for a user. It is fine.
+We can untick the second one. You can
+untick the second one and you can untick
+the meeting delete registrant admin as
+well because that is for
+update.
+>> Okay. And then just say continue.
+Uh yes.
+>> Okay.
+>> Mhm.
+>> Okay. Yeah. Ivan, uh so you have the
+application, right?
+>> Yes, I do. Um
+>> Okay. So you you are added in the same
+application onto the novels B2.
+Okay. So, right now I'm creating a new
+one and I'm going to I'm I'm at at the
+moment to create the the you know the
+call uh the meeting. So, let me
+you know execute it.
+>> Yeah.
+Okay, good. The meeting was created. So,
+let me go here. I'm assuming that um
+get an email
+soon.
+Oh, are you
+Mhm.
+>> Okay. So if I click and join join
+meeting right a light is when the issue
+happen.
+>> Mhm.
+>> Right. So the the thing is that I got
+okay here.
+So
+I think
+>> yeah try
+>> it should be it should be after they
+join it'll it'll prompt them.
+The thing is that I don't I have
+workplace. I don't know I don't know if
+uh that's good or bad.
+>> That's what that's what they're all it's
+the same.
+>> Okay cool. So, you have you mean
+>> Oh, you mean you mean because you're
+signed in? Oh, I get you. Um, yeah.
+Close that one out and see if you can
+just join from the from the browser.
+Like, copy copy that link and paste it
+like in an incognito tab or something.
+>> Okay.
+Yeah. Open up right away. I think
+>> he join He join from He join from
+browser.
+>> Yes.
+>> And close that out and join.
+>> Okay. Close that out. Leave meeting and
+join from browser. Okay.
+>> Yeah.
+>> And that's the statement.
+>> That's fine. Continue without
+>> whatever.
+Okay. Whatever.
+>> It didn't ask me for anything.
+>> Let me see what's the meeting URL or the
+meeting info. I want to check it here.
+Um
+992
+72
+6
+4 0 792
+7260 6479
+You scheduled it on whose behalf?
+>> Rosa Tusans.
+>> Okay, let me get that
+and then for tomorrow.
+>> Yes.
+>> Okay.
+Uh 3:30. Okay,
+I see it here.
+Scroll scroll up a little bit, Ivan. I
+want to see something there.
+So, the meeting does have Yeah.
+Registration required. I'll share I'll
+share my screen here.
+>> Mhm.
+So, it probably didn't prompt you
+because maybe the the doctor wasn't on
+to actually start the meeting,
+but let me share here.
+Okay.
+Close a few tabs here.
+>> We got that text.
+>> Yeah. So, so I'm going go back. I'm not
+going to change any setting here.
+>> So, this is the meeting.
+>> It's a 331 that he just said. This is
+with that ID. If I come in here and hit
+edit. So for one I see you see here
+registration it shows required.
+So we would want we want this off of
+course right. And then
+>> okay.
+>> Yeah. And then I see here.
+All right. Not here. Trying to go back.
+This is I have an issue that when I
+share my screen it gets really really
+laggy and I can't click on anything.
+Let me see show.
+So um I'm trying to show it. It was
+showing an option right before I clicked
+here that said four four registrants.
+So I just wanted to make sure that that
+was fine too. But this this is the major
+thing right here required.
+>> Uh this should be unticked right?
+>> Correct. There should be it should be no
+link at all.
+Uh cuz it usually it will present them a
+link
+>> to register and then that's what the
+what the client sees right after they
+they join the meeting. So if I go here
+to meetings upcoming
+this one right here.
+Yeah. You see they get a a registration
+link. So then with the client, what they
+see when they click on the meeting right
+before they're going to join is this
+right here.
+So they have to fill this in.
+>> Yeah, they have to fill all this in here
+and they have to click on this. They
+have to register. Once they register,
+then they can join the meeting. But this
+is an extra step
+>> especially for the
+>> an extra extra step. Yeah, you're
+getting
+>> Okay. Mhm.
+Okay. Got the point.
+Uh, okay. Uh, so Ellie, can you just go
+on to that page where we were looking on
+to the registrant admin settings?
+>> Yeah. So, and that that's where I was
+application.
+>> Yeah. And that's what I was mentioning
+here earlier. So you see how under
+registration
+it shows registrance
+as opposed to maybe participants. So I
+don't know if maybe registration or
+registrance is the right option but it
+shows here four registrants. These are
+the ones that we tested with just now.
+So we see here you know Ivan's uh
+personal email right here.
+>> So we see that they they're one of the
+registrants. So that means that the
+person has to put this email in order to
+get in. So if for whatever reason, you
+know, they get sent the link and this is
+just an email that we have on on the
+system on their on their profile, but
+they they enter a different email,
+they're not able to see the doctor
+because they're technically not
+registered.
+>> So that that's kind of what we're
+running into. So I'll go back here.
+and go back to the scopes. Oh gosh, this
+is so long.
+>> So as of now, how how the patients are
+managing like they are you are
+instructing them to
+uh put in
+put in the doctor's side or how is that
+like they entering any ID to get it
+passed to get the registration pass for
+now? Well, for some for some they've
+just canceled it and they've they've
+sent it the old way without using Novox,
+the Novivvox route. Our old classic way
+is we generate it on our side and we
+send them the link directly.
+>> So, obviously that has caused a lot of
+clients to just
+>> not want to meet with us at all and just
+cancel their appointment because it's
+too complicated.
+>> Oh, okay.
+Got it.
+Okay. Uh add distance to the
+add
+Let's twist.
+Uh okay. Uh
+Ellie, can you click on this remove a
+meeting resistant over here? Like down
+below in the center there's an option
+meeting delete resistant admin. Can you
+take that?
+>> You want me to do optional here too?
+Yes, this one.
+Uh, okay. Just a sec.
+So these these are the defined scopes.
+Uh these are regardless of if we tick or
+untick them, right? They are already
+onto the application
+like they will display on the uh API uh
+API.
+Okay. Go ahead.
+>> Yeah. I guess I guess what we would like
+um for your support team to help us out
+um it would be to to see if there's um
+if for whatever reason you guys can look
+at like the part that hits your end
+>> to see if maybe the fact that since we
+don't see it on our side
+>> an option to turn it on or off
+>> that on your end when it hits your call
+it's maybe enabling it by default
+because it doesn't register it to us
+like the default is yes. So if if that
+can be checked to see if maybe there's
+something related to registration
+that can be turned off or at least now
+maybe with this optional so that we can
+now get enable that option on our side
+and turn it off.
+>> Something like that would be great.
+>> Right. Right. Can you click on scopes
+again like have you selected that and
+could and selected
+continue? Yeah.
+>> Yeah. Yeah. I saved that.
+>> Okay. Uh can you disable the first one?
+The first one which is already clicked
+and then continue. Click on continue.
+Yeah,
+correct. Now keep it. Yeah, the host
+and now can we get that registration
+link again? Like if you click on the
+PlayStation link and then see if the
+>> Oh, so like generate a new one.
+>> Yeah.
+>> No, I think I think they're going into
+Rosa Tusans and see if the require
+unchecked now, right?
+>> No, that that won't be because it it
+already created it with whatever setting
+we had. So that's going to stay on.
+do without to generate a new one.
+Let me go back to
+and I'll check it anyways, but that
+that's probably have to create a new
+one.
+Yeah, still registration link here.
+Okay. How long
+and I'm sorry guys like uh we are just
+investigating and trying to find the
+solution for it. Uh hope you don't mind
+spending some time
+and
+Mhm.
+And you cancel the Zoom link uh live for
+that appointment so I can create a new
+one.
+>> Oh yeah. Yeah.
+Okay. Uh, deleted.
+Okay, it again
+I believe is uh 4261.
+Yeah.
+>> Okay, let me check.
+>> Can you share your screen? Oh, slow you.
+>> Yeah, no, it's fine. I see it here
+though.
+You always can connect outside view from
+the meetings. I usually do that and not
+inside view. So it's super slow.
+>> It's an issue. No, it's an issue with
+the with the Mac.
+I don't know why it's specifically
+teams, but it's here. Um, so I still see
+a registration link and let me go to
+edit.
+Uh, and it still shows as required here.
+Okay,
+product.
+Uh, we'll see what changes we need to
+make on our side.
+Uh, but from the nation phase, the APIs
+are still the same. We haven't made any
+changes
+like I'm not sure how this is appearing
+now. registration required.
+>> Okay. Uh
+so earlier like Eddie just this this
+registration required wasn't appearing
+at all. Right.
+>> No no we haven't.
+>> Yeah. Yeah. Before before was not
+prompting for registration at least from
+the testing that we did and Ivan you can
+you can corroborate this with me. We
+tested with two different doctors and
+and we did not have that that problem.
+No, but the testing the testing was done
+like you know three or four months ago
+but then we went live with two doctors
+and they never had this issue before.
+They just start happening uh you know
+you know like a month ago. Yeah.
+>> Yeah. A couple weeks ago.
+>> Yeah.
+>> Okay. No shoes uh uh Aliban and thank
+you for your time and cooperation for
+this meeting. I will uh raise this to my
+internal team uh for further
+investigation on the API side because uh
+as for my knowledge we are only uh
+having the APIs where we were we are
+having several parameters
+uh including
+like there are three API shuling,
+rechuling and cancel as you guys know.
+So I'll uh investigate with my team and
+for sure escalate this case to my team
+and provide the required details. Well,
+this is already escalated that's why we
+are connected over here. So I will
+forward these details all of the
+artifacts that we have collected on this
+call. Uh and we'll surely be providing
+an update to you guys by Monday because
+tomorrow is basically a national holiday
+on our side.
+>> Okay.
+>> And so we'll provide you an update for
+sure by Monday.
+Hope you have a great weekend.
+>> Thank you. Have a nice one.
+>> Yeah.
+>> Okay. Thank you.
+>> Thank you. Thank you guys again and hope
+you don't mind taking this time.
+whatever you think.
+>> Okay. All right. Thank you.
+>> Yeah. Okay. Thank you. Bye-bye. Bye-bye.

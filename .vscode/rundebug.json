@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "configurations": [
+    {
+      "name": "Run Java",
+      "file": "RunJava.java",
+      "mode": "run",
+      "id": "dd838da4-c362-4233-8783-741149cba01e"
+    }
+  ]
+}

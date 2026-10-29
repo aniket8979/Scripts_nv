@@ -1,0 +1,73 @@
+{
+    "status": "SUCCESS",
+    "code": "200",
+    "message": "patient data from athena",
+    "data": {
+        "patient": {
+            "id": "1",
+            "patientName": "Athena Test",
+            "dob": "01/01/1993",
+            "email": "test@athena.com",
+            "ssn": "",
+            "address": "123 Anytown Lane HOLLYWOOD CA 75412",
+            "patientType": "active",
+            "phoneNumber": "",
+            "consentToCall": "No",
+            "consentToText": "",
+            "department": "East Dallas Dental",
+            "ecName": "",
+            "ecPhone": "",
+            "ecRelationShip": "",
+            "employer": "",
+            "employerContact": "",
+            "img": "eyeIcon"
+        },
+        "appointment": {
+            "futureAppointment": 0,
+            "upcomingAppointmentDate": "",
+            "upcomingAppointmentDoctor": "",
+            "cancelled": 0,
+            "booked": 0,
+            "completed": 0,
+            "noShow": 0,
+            "apptView": [],
+            "apptViewCount": 0,
+            "img": "eyeIcon"
+        },
+        "insuranceInfo": {
+            "insuranceName": "*SELF PAY*",
+            "insuranceCode": "N",
+            "insuranceType": "Personal Payment (Cash - No Insurance)",
+            "startDate": "11/13/2024",
+            "endDate": "",
+            "img": "eyeIcon"
+        },
+        "pharmacyDetail": {
+            "pharmacyName": "",
+            "pharmacyNumber": ""
+        },
+        "patientCareTeam": {
+            "careTeamName": "",
+            "careTeamSpeciality": ""
+        },
+        "billingDetail": {
+            "totalPendingBills": 0,
+            "totalBalanceAmount": "$0",
+            "billList": [
+                {
+                    "id": "",
+                    "code": "",
+                    "date": "",
+                    "department": "",
+                    "description": "",
+                    "providerName": "",
+                    "ptBalance": "$0.00",
+                    "insuranceBalance": "$0.00",
+                    "img": "eyeIcon"
+                }
+            ],
+            "billListCount": 0,
+            "billingInfo": []
+        }
+    }
+}

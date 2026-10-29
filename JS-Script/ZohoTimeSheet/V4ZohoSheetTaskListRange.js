@@ -116,7 +116,70 @@ async function fetchActiveProjects(portalId, csrfToken, cookies) {
     return await response.json();
 }
 
+// Same endpoint the Zoho web UI uses for the project "Tasks" tab (owner-filtered, "All Open" view)
 async function fetchAssignedTasks(portalId, projectId, userId, csrfToken, cookies) {
+    const filter = JSON.stringify({
+        criteria: [{ criteria_condition: "is", value: [String(userId)], field_name: "owner" }],
+        pattern: "1"
+    });
+
+    const body = new URLSearchParams({
+        projId: projectId,
+        pagefor: 'project',
+        mileId: '0',
+        datafor: 'tasks',
+        frompage: 'arctlist',
+        filter: filter,
+        cviewId: '824168000010082003', // "All Open" predefined view
+        zpcp: csrfToken.replace(/^zpcp=/, '')
+    });
+
+    const response = await fetch('https://projects.zoho.com/portal/novelvoxsoftwares/tasklistview.do', {
+        method: 'POST',
+        headers: {
+            'Accept': 'json',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0',
+            'Referer': 'https://projects.zoho.com/portal/novelvoxsoftwares',
+            'Origin': 'https://projects.zoho.com',
+            'X-ZCSRF-TOKEN': csrfToken,
+            'X-ZOHO-SERVICE': 'Projects',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Cookie': cookies
+        },
+        body: body.toString()
+    });
+
+    if (!response.ok) {
+        console.log(`   ⚠️ tasklistview.do returned HTTP ${response.status}, falling back to timesheet API...`);
+        return fetchAssignedTasksV3(portalId, projectId, userId, csrfToken, cookies);
+    }
+
+    const data = await response.json();
+    const views = Array.isArray(data) ? data : [data];
+    const seen = new Set();
+    const tasks = [];
+
+    for (const view of views) {
+        for (const t of (view.TASKS || [])) {
+            const isMine = (t.OWNERDETAILS || []).some(o => String(o.OWNERID) === String(userId))
+                || String(t.TUSERSTR || '').split(',').includes(String(userId));
+            if (!isMine || t.ISCOMP || t.TIMESHEET_CREATE === false || seen.has(t.TID)) continue;
+            seen.add(t.TID);
+            tasks.push({ id: t.TID, name: t.TTITLE });
+        }
+    }
+
+    if (tasks.length === 0) {
+        if (process.env.ZOHO_DEBUG) {
+            console.log("   [debug] raw tasklistview response:", JSON.stringify(data).slice(0, 2000));
+        }
+        return fetchAssignedTasksV3(portalId, projectId, userId, csrfToken, cookies);
+    }
+    return tasks;
+}
+
+async function fetchAssignedTasksV3(portalId, projectId, userId, csrfToken, cookies) {
     const queryParams = new URLSearchParams({
         page: '1',
         per_page: '100',
